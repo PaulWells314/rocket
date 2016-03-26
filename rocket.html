@@ -1,0 +1,162 @@
+
+
+ <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Getting Started with Three.js</title> 
+        <button onclick="upFunction()">Up</button>
+        <button onclick="downFunction()">Down</button>
+        <button onclick="offFunction()">Off</button>
+        <input type="text" id="TEXTBOX_ID">   
+        <script src="three.js/build/three.min.js"></script>
+        <script>
+        function upFunction()
+        {
+          up = -1.0;
+        }
+
+        function downFunction()
+        {
+          up = 1.0;
+        }
+        function offFunction()
+        {
+          up = 0.5;
+        }
+        function Rocket(scene) {
+            var geometry = new THREE.CylinderGeometry( 2, 2, 6, 32 );
+            var material = new THREE.MeshLambertMaterial( { color: 0xff0000});
+            this.capsule = new THREE.Mesh( geometry, material );
+            this.capsule.position.x = 0
+            this.capsule.position.y = -4
+            this.capsule.position.z = 0
+            scene.add( this.capsule );
+            
+            var geometry = new THREE.CylinderGeometry( 1, 1, 2, 32 );
+            //var material = new THREE.MeshLambertMaterial( {color: 0xff0000} );
+            var material = new THREE.MeshPhongMaterial( {color: 0x996633, 
+    specular: 0x080808,
+    shininess: 100} );
+            this.booster1 = new THREE.Mesh( geometry, material );
+            this.booster1.position.x = 1
+            this.booster1.position.y = -7
+            this.booster1.position.z = 1
+            scene.add( this.booster1 );
+            
+          var geometry = new THREE.CylinderGeometry( 1, 1, 2, 32 );
+            //var material = new THREE.MeshLambertMaterial( {color: 0xff0000} );
+            var material = new THREE.MeshPhongMaterial( {color: 0x996633, 
+    specular: 0x080808,
+    shininess: 100} );
+            this.booster2 = new THREE.Mesh( geometry, material );
+            this.booster2.position.x = -1
+            this.booster2.position.y = -7
+            this.booster2.position.z = 1
+            scene.add( this.booster2 );
+            
+            var geometry = new THREE.CylinderGeometry( 1, 1, 2, 32 );
+            //var material = new THREE.MeshLambertMaterial( {color: 0xff0000} );
+            var material = new THREE.MeshPhongMaterial( {color: 0x996633, 
+    specular: 0x080808,
+    shininess: 100} );
+            this.booster3 = new THREE.Mesh( geometry, material );
+            this.booster3.position.x = 1
+            this.booster3.position.y = -7
+            this.booster3.position.z = -1
+            scene.add( this.booster3 );
+            
+             var geometry = new THREE.CylinderGeometry( 1, 1, 2, 32 );
+            //var material = new THREE.MeshLambertMaterial( {color: 0xff0000} );
+            var material = new THREE.MeshPhongMaterial( {color: 0x996633, 
+    specular: 0x080808,
+    shininess: 100} );
+            this.booster4 = new THREE.Mesh( geometry, material );
+            this.booster4.position.x = -1
+            this.booster4.position.y = -7
+            this.booster4.position.z = -1
+            scene.add( this.booster4 );
+            
+             var geometry = new THREE.CylinderGeometry( 0, 2, 2, 32 );
+            //var material = new THREE.MeshLambertMaterial( {color: 0xff0000} );
+            var material = new THREE.MeshPhongMaterial( {color: 0x996633, 
+    specular: 0x080808,
+    shininess: 100} );
+            this.stage1 = new THREE.Mesh( geometry, material );
+            this.stage1.position.x = 0
+            this.stage1.position.y = 0
+            this.stage1.position.z = 0
+            scene.add( this.stage1);
+        }
+        
+        Rocket.prototype.setY = function(y) {
+           this.capsule.position.y = -y - 4;
+           this.stage1.position.y  = -y;
+           this.booster1.position.y = -y - 7;
+           this.booster2.position.y = -y - 7;
+           this.booster3.position.y = -y - 7;
+           this.booster4.position.y = -y - 7;
+        }
+        window.onload = function() {
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize( 800, 600 );
+            document.body.appendChild( renderer.domElement );
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(
+                35,             // Field of view
+                800 / 600,      // Aspect ratio
+                0.1,            // Near plane
+                10000           // Far plane
+            );
+            camera.position.set( -15, 10, 10 );
+            camera.lookAt( scene.position );
+
+            rocket = new Rocket(scene);
+
+            var light = new THREE.PointLight( 0xFFFFFF );
+            light.position.set( 10, 5, 10 );
+            scene.add( light );
+            
+            //var light2 = new THREE.PointLight( 0xFFFF00 );
+            //light2.position.set( 0, 10, 10 );
+            //scene.add( light2 );
+            
+            var light3 = new THREE.AmbientLight( 0x04F4F4F ); // soft white light
+            scene.add( light3 );
+
+            renderer.setClearColor( 0xdddddd, 1);
+            
+            // Render the scene
+            renderer.render( scene, camera );
+            y = 0;
+            v = 0;
+            up = 0;
+            run();
+            }
+            function run()
+            {
+               // Render the scene
+               renderer.render( scene, camera );
+            
+               // set rocket position to Y
+               rocket.setY(y);
+
+               // Ask for another frame
+               requestAnimationFrame(run);
+               
+               y = y + 0.05*v
+               v = v + 0.005*up
+               
+               if (y >  0)
+               {
+                  y = 0;
+                  v = 0;
+               }
+
+            }
+        </script>
+    </head>
+    <body></body>
+    </html>
